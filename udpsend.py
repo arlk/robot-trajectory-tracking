@@ -2,6 +2,7 @@
 
 import socket
 import struct
+import math
 
 UDP = "localhost"
 PORT = 20000
@@ -11,6 +12,7 @@ yaw = 0.0
 rbid = 1.0
 status = 1.0
 nbot = 3
+count = 0
 
 try:
 	while True:
@@ -19,9 +21,10 @@ try:
 			xs = x + 100*i
 			ys = y + 100*i
 			rbid = i
-			yaw = i*0.5
-			msg = struct.pack('<ddddd',xs,ys,yaw,rbid,status)
+			yaw = i
+			msg = struct.pack('<dddddd',xs,ys,yaw,rbid,status,i+count*3)
 			sock.sendto(msg, (UDP,PORT))
+		count += 1
 except:
 	print("\nClosing Ports\n")
 	sock.close()

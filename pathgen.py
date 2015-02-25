@@ -1,5 +1,6 @@
 import socket
 import struct
+import math
 
 #Room size
 room_length = 5.5
@@ -19,6 +20,9 @@ rob_wheel_pos = 2.0/3.0 #Value between 1 and 0
 #Grid Size
 grid_space = 0.5 
 dot_space = 0.05 
+
+#Font Size
+fntsz = 20
 
 UDP = "localhost"
 PORT = 20000
@@ -42,6 +46,8 @@ def setup():
 	colorMode(RGB)
 	frameRate(600)
 	noStroke()
+	ubuntu_med = loadFont("Ubuntu-Medium-60.vlw")
+	textFont(ubuntu_med,fntsz)
 
 def draw():
 	fill(255,255,255)
@@ -63,7 +69,7 @@ def draw():
 	for row in data:
 		pushMatrix()
 		translate(row[0],row[1])
-		rotate(row[2])
+		rotate(row[2]*frameCount/200)
 		draw_robot(row[3])
 		popMatrix()
 
@@ -74,19 +80,18 @@ def draw_major_axes():
 
 def draw_minor_axes():
 	noSmooth()
-	for i in range(int(room_width/(2*grid_space))):
+	for i in range(int(math.ceil(room_width/(2*grid_space)))):
 		for j in range(int(room_length/(2*dot_space))):
 			draw_point(convert_coord(i*grid_space,j*dot_space))
 			draw_point(convert_coord(-i*grid_space,j*dot_space))
 			draw_point(convert_coord(i*grid_space,-j*dot_space))
 			draw_point(convert_coord(-i*grid_space,-j*dot_space))
-	for j in range(int(room_length/(2*grid_space))):
+	for j in range(int(math.ceil(room_length/(2*grid_space)))):
 		for i in range(int(room_width/(2*dot_space))):
 			draw_point(convert_coord(i*dot_space,j*grid_space))
 			draw_point(convert_coord(-i*dot_space,j*grid_space))
 			draw_point(convert_coord(i*dot_space,-j*grid_space))
 			draw_point(convert_coord(-i*dot_space,-j*grid_space))
-
 
 def draw_point(pt):
 	point(pt[0],pt[1])
@@ -101,6 +106,12 @@ def draw_robot(r_id):
 	rectMode(CENTER)
 	fill(color_bot[r_id])
 	rect(0.0,0.0,rob_rect_x,rob_rect_y)
+	pushMatrix()
+	rotate(HALF_PI)
+	translate(-fntsz/3.0,fntsz/3.0)
+	fill(255)
+	text(r_id,0,0)
+	popMatrix()
 	stroke(50)
 	fill(255)
 	beginShape()

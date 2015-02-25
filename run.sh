@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # Before executing add the directory of processing-py.sh and, 
-# pathgen_processing folder to your PATH environment variable
+# pathgen_processing directory to your PATH environment variable
 process=processing-py.sh
 pathgen=pathgen.py
-udpsend=udps.py
+udpsend=udps.py #USE ONLY WHEN SENDING SIMULATION DATA
 
 echo "UDP simulation data sending..."
-exec ${udpsend} &
+exec ${udpsend} &	
 
 echo "UDP receiving..."
 echo "Starting simulation..."

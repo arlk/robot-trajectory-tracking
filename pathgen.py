@@ -31,14 +31,14 @@ def setup():
 	size(pix_x,pix_y)
 	colorMode(RGB)
 	noStroke()
-	frameRate(1)
+	frameRate(600)
 
 def draw():
 	fill(255,255,255)
 	rectMode(CORNER)
 	rect(0.0,0.0,width,height)
 	udprecv, addr = sock.recvfrom(1024)
-	x,y,yaw,rbid,status = struct.unpack('<ddddd',udprecv)
+	x,y,yaw,rbid,status,dataRate = struct.unpack('<dddddd',udprecv)
 	rbid = int(rbid)
 	if status == 1:
 		col = [row[3] for row in data]
@@ -52,7 +52,7 @@ def draw():
 		rotate(row[2])
 		rectMode(CENTER)
 		rect(0,0,rob_x,rob_y)
-		translate(-row[0],-row[1])
 		rotate(-row[2])
+		translate(-row[0],-row[1])
 
 

@@ -1,30 +1,28 @@
 #!/usr/bin/env python
 
+#Edit however required
+
 import socket
 import struct
 import math
 
 UDP = "localhost"
 PORT = 20000
-x = 10.0
-y = 20.0
-yaw = 0.0
-rbid = 1.0
+xs = [1.0, -1.0,  1.0]
+ys = [1.0, -1.0, -1.0]
+yaw = [1.0, -0.5, -3.141]
 status = 1.0
-nbot = 3
-count = 0
+nbots = 3
+count = 1
 
 try:
 	while True:
-		for i in range(1,nbot+1):
+		for i in range(0,nbots):
 			sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-			xs = x + 100*i
-			ys = y + 100*i
-			rbid = i
-			yaw = -i
-			msg = struct.pack('<dddddd',xs,ys,yaw,rbid,status,i+count*3)
+			msg = struct.pack('<dddddd',xs[i],ys[i],yaw[i],i+1,status,count)
 			sock.sendto(msg, (UDP,PORT))
-		count += 1
+			count += 1
+
 except:
 	print("\nClosing Ports\n")
 	sock.close()

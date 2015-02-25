@@ -7,8 +7,14 @@ room_width = 3.35
 scale_img = 120.0
 
 #Robot dimensions
-rob_x = int(0.15 * scale_img)
-rob_y = int(0.2 * scale_img)
+rob_scale = 1.2
+rob_rect_x = int(0.15 * scale_img * rob_scale)
+rob_rect_y = int(0.2 * scale_img * rob_scale)
+rob_trapz_wid = int(0.05 * scale_img * rob_scale)
+rob_trapz_side = int(0.07 * scale_img * rob_scale)
+rob_wheel_x = int(0.04 * scale_img * rob_scale)
+rob_wheel_y = int(0.02 * scale_img * rob_scale)
+rob_wheel_pos = 2.0/3.0 #Value between 1 and 0
 
 UDP = "localhost"
 PORT = 20000
@@ -20,9 +26,9 @@ print("\n\nPress ctrl + C to exit\n\n")
 pix_x = int(room_width*scale_img)
 pix_y = int(room_length*scale_img)
 
-color_bot = {1: color(58,116,197),
+color_bot = {1: color(71,82,224),
 			 2: color(0,255,30),
-			 3: color(220,20,60),
+			 3: color(255,50,50),
 			 4: color(240,255,0)}
 
 data = []
@@ -30,8 +36,8 @@ data = []
 def setup():
 	size(pix_x,pix_y)
 	colorMode(RGB)
-	noStroke()
 	frameRate(600)
+	noStroke()
 
 def draw():
 	fill(255,255,255)
@@ -47,12 +53,32 @@ def draw():
 		else:
 			data[col.index(rbid)] = [x,y,yaw,rbid]
 	for row in data:
-		fill(color_bot[row[3]])
+		pushMatrix()
 		translate(row[0],row[1])
 		rotate(row[2])
-		rectMode(CENTER)
-		rect(0,0,rob_x,rob_y)
-		rotate(-row[2])
-		translate(-row[0],-row[1])
+		draw_robot(row[3])
+		popMatrix()
 
+def draw_robot(r_id):
+	stroke(150)
+	rectMode(CENTER)
+	fill(color_bot[r_id])
+	rect(0.0,0.0,rob_rect_x,rob_rect_y)
+	stroke(50)
+	fill(255)
+	beginShape()
+	vertex(rob_rect_x/2.0,rob_rect_y/2.0)
+	vertex(rob_rect_x/2.0+rob_trapz_wid,rob_trapz_side/2.0)
+	vertex(rob_rect_x/2.0+rob_trapz_wid,-rob_trapz_side/2.0)
+	vertex(rob_rect_x/2.0,-rob_rect_y/2.0)
+	endShape()
+	noStroke()
+	draw_wheel(rob_wheel_pos*rob_rect_x/2.0,rob_rect_y/2+rob_wheel_y/2)
+	draw_wheel(rob_wheel_pos*rob_rect_x/2.0,-rob_rect_y/2-rob_wheel_y/2)
+	draw_wheel(-rob_wheel_pos*rob_rect_x/2.0,rob_rect_y/2+rob_wheel_y/2)
+	draw_wheel(-rob_wheel_pos*rob_rect_x/2.0,-rob_rect_y/2-rob_wheel_y/2)
 
+def draw_wheel(wx,wy):
+	fill(0)
+	rectMode(CENTER)
+	rect(wx,wy,rob_wheel_x,rob_wheel_y)

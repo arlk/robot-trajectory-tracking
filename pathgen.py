@@ -8,12 +8,12 @@ scale_img = 120.0
 
 #Robot dimensions
 rob_scale = 1.2
-rob_rect_x = int(0.15 * scale_img * rob_scale)
-rob_rect_y = int(0.2 * scale_img * rob_scale)
-rob_trapz_wid = int(0.05 * scale_img * rob_scale)
-rob_trapz_side = int(0.07 * scale_img * rob_scale)
-rob_wheel_x = int(0.04 * scale_img * rob_scale)
-rob_wheel_y = int(0.02 * scale_img * rob_scale)
+rob_rect_x = 0.15 * scale_img * rob_scale
+rob_rect_y = 0.2 * scale_img * rob_scale
+rob_trapz_wid = 0.05 * scale_img * rob_scale
+rob_trapz_side = 0.07 * scale_img * rob_scale
+rob_wheel_x = 0.04 * scale_img * rob_scale
+rob_wheel_y = 0.02 * scale_img * rob_scale
 rob_wheel_pos = 2.0/3.0 #Value between 1 and 0
 
 UDP = "localhost"
@@ -44,7 +44,9 @@ def draw():
 	rectMode(CORNER)
 	rect(0.0,0.0,width,height)
 	udprecv, addr = sock.recvfrom(1024)
-	x,y,yaw,rbid,status,dataRate = struct.unpack('<dddddd',udprecv)
+	worldx,worldy,yaw,rbid,status,dataRate = struct.unpack('<dddddd',udprecv)
+	x,y = convert_coord(worldx,worldy)
+	yaw *= -1  #Reversing direction of rotation
 	rbid = int(rbid)
 	if status == 1:
 		col = [row[3] for row in data]
@@ -58,6 +60,11 @@ def draw():
 		rotate(row[2])
 		draw_robot(row[3])
 		popMatrix()
+
+def convert_coord(mocapx,mocapy):
+	px = pix_x/2 + (mocapx*scale_img)
+	py = pix_y/2 - (mocapy*scale_img)
+	return (px,py)
 
 def draw_robot(r_id):
 	stroke(150)

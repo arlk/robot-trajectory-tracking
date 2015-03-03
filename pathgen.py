@@ -1,6 +1,5 @@
 import socket
 import struct
-import math
 
 #####ROBOT AND LAB INFO####
 ###########################
@@ -37,7 +36,7 @@ fntsz = 20
 
 #Curve characteristics
 sm = 10 #Fineness of curve
-ptdist = 5 #Distance between control points
+ptdist = 10 #Distance between control points
 
 #########UDP COMMS########
 ##########################
@@ -79,6 +78,7 @@ def draw():
 	rect(0.0,0.0,width,height)
 	draw_major_axes()
 	draw_minor_axes()
+	smooth()
 	udprecv, addr = sock.recvfrom(1024)
 	worldx,worldy,yaw,rbid,status,dataRate = struct.unpack('<dddddd',udprecv)
 	x,y = convert_coord(worldx,worldy)
@@ -147,13 +147,13 @@ def draw_major_axes():
 
 def draw_minor_axes():
 	noSmooth()
-	for i in range(int(math.ceil(room_width/(2*grid_space)))):
+	for i in range(int(ceil(room_width/(2*grid_space)))):
 		for j in range(int(room_length/(2*dot_space))):
 			draw_point(convert_coord(i*grid_space,j*dot_space))
 			draw_point(convert_coord(-i*grid_space,j*dot_space))
 			draw_point(convert_coord(i*grid_space,-j*dot_space))
 			draw_point(convert_coord(-i*grid_space,-j*dot_space))
-	for j in range(int(math.ceil(room_length/(2*grid_space)))):
+	for j in range(int(ceil(room_length/(2*grid_space)))):
 		for i in range(int(room_width/(2*dot_space))):
 			draw_point(convert_coord(i*dot_space,j*grid_space))
 			draw_point(convert_coord(-i*dot_space,j*grid_space))
@@ -248,7 +248,6 @@ def mouseReleased():
 				spline_file.write(splinepts)
 			spline_file.close()
 
-
 def drawSpline():
 	for loop_id in range(num_draw_rbts):
 		fill(255,0)
@@ -257,7 +256,7 @@ def drawSpline():
 		read_pt = open(store_pt_name[loop_id],"r")
 		curve_pt = [(linef.rstrip('\n')).split(',') for linef in read_pt]
 		read_pt.close()
-		if len(curve_pt) >= 2*sm:
+		if len(curve_pt) > 2*sm:
 			spline_pt = []
 			for t in range(sm+1):
 				spline_pt.append(interpolateSpline(float(t)/sm,curve_pt[0],curve_pt[0],curve_pt[ptdist],curve_pt[ptdist*2]))
@@ -281,5 +280,5 @@ def interpolateSpline(t,p1,p2,p3,p4):
 	return point
 
 def color_bot(cid,alpha):
-	col_no = (cid-1)%len(color_robot)
+	col_no = cid%len(color_robot) -1
 	return color(color_robot[col_no][0],color_robot[col_no][1],color_robot[col_no][2],alpha)

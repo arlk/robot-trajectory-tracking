@@ -94,11 +94,17 @@ def draw():
 	rectMode(CORNER)
 	rect(pix_x-60,pix_y-fntsz,100,fntsz)
 	fill(255)
-	text("Clear",pix_x-55,pix_y-0.1*fntsz)
+	text("Done",pix_x-55,pix_y-0.1*fntsz)
+	fill(100)
+	rect(pix_x-60,pix_y-2*fntsz,100,fntsz)
+	fill(255)
+	text("Clear",pix_x-55,pix_y-1.1*fntsz)
 	if mouseButton == LEFT:
-		if mouseX > pix_x-60 and mouseY > pix_y - fntsz:
+		if mouseX > pix_x-60 and mouseY > pix_y - 2*fntsz:
 			draw_rbid = 0
 			num_draw_rbts = 0
+		if mouseX > pix_x-60 and mouseY > pix_y - fntsz:
+			sys.exit(0)
 	if len(present_id) > 0:
 		stroke(255)
 		strokeWeight(1)
@@ -196,7 +202,7 @@ def mousePressed():
 	draw_rbid += 1
 	if draw_rbid <= len(present_id):
 		num_draw_rbts = draw_rbid
-		store_pt_name.append("store_pt_robot:{}.txt".format(draw_rbid))
+		store_pt_name.append("temp_store_pt_robot:{}.txt".format(draw_rbid))
 		store_pt = open(store_pt_name[draw_rbid-1],"w+")
 		store_pt.truncate()
 		store_pt.close()

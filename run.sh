@@ -13,6 +13,10 @@ echo "UDP receiving..."
 echo "Starting simulation..."
 ${process} ${pathgen}
 
-# Use the following cmd if program crashes 
-# to stop udps.py to send data continously:
-# kill -9 `ps -ef | grep python | grep -v grep | awk '{print $2}'`
+echo "Deleting temporary files.."
+rm -rf temp*
+
+echo "Killing UDP simulator"
+kill `ps a | grep udps.py | awk '{print $1}'`
+
+echo "Finished. Find your trajectory files stored as robot_traj_id:1/2/3.txt etc"

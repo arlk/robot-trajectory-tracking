@@ -43,10 +43,10 @@ num_draw_rbts = 0
 pix_x = int(room_width * scale_img)
 pix_y = int(room_length * scale_img)
 
-color_bot = {1: color(71,82,224),
-			 2: color(0,255,30),
+color_bot = {1: color(50,55,100),
+			 2: color(49,163,84),
 			 3: color(255,50,50),
-			 4: color(240,255,0)}
+			 4: color(225,204,0)}
 
 data = []
 
@@ -60,7 +60,11 @@ def setup():
 
 def draw():
 	global present_id
+	global draw_rbid
+	global num_draw_rbts
 	present_id = []
+	strokeWeight(1)
+	stroke(255)
 	fill(255)
 	rectMode(CORNER)
 	rect(0.0,0.0,width,height)
@@ -85,13 +89,32 @@ def draw():
 		draw_robot(row[3])
 		popMatrix()
 	drawSpline()
+	fill(100)
+	stroke(0)
+	strokeWeight(2)
+	rectMode(CORNER)
+	rect(pix_x-60,pix_y-fntsz,100,fntsz)
+	fill(255)
+	text("Clear",pix_x-55,pix_y-0.1*fntsz)
+	if mouseButton == LEFT:
+		if mouseX > pix_x-60 and mouseY > pix_y - fntsz:
+			draw_rbid = 0
+			num_draw_rbts = 0
 	if len(present_id) > 0:
-		stroke(255,0.2)
+		stroke(255)
 		strokeWeight(1)
 		rectMode(CORNER)
 		if mouseButton != LEFT and draw_rbid < len(present_id):
 			fill(color_bot[present_id[draw_rbid]])
 			rect(0,0,pix_x,fntsz*1.5)
+			circtimeout = frameCount%600
+			if circtimeout<300:
+				fill(255,0)
+				strokeWeight(float(circtimeout%300)/30)
+				circ_col = color_bot_alpha([present_id[draw_rbid]][0],255*(1-float(circtimeout%300)/300))
+				stroke(circ_col[0],circ_col[1],circ_col[2],circ_col[3])
+				circ = data[col.index(present_id[draw_rbid])]
+				ellipse(circ[0],circ[1],float(circtimeout%300)/3,float(circtimeout%300)/3)
 			fill(255)
 			prompt = "Draw trajectory for Robot:{}".format(present_id[draw_rbid])
 			text(prompt,fntsz/3,fntsz)
@@ -243,3 +266,7 @@ def interpolateSpline(t,p1,p2,p3,p4):
 	point[0] = f1*float(p1[0]) + f2*float(p2[0]) + f3*float(p3[0]) + f4*float(p4[0])
 	point[1] = f1*float(p1[1]) + f2*float(p2[1]) + f3*float(p3[1]) + f4*float(p4[1])
 	return point
+
+def color_bot_alpha(cid,alf):
+	color_robot = [[50,55,100],[49,163,84],[255,50,50],[225,204,0]]
+	return [color_robot[cid-1][0],color_robot[cid-1][1],color_robot[cid-1][2],alf]

@@ -25,12 +25,12 @@ dot_space = 0.05
 fntsz = 20
 
 #Curve characteristics
-sm = 20
+sm = 10
 ptdist = 5
 
 #UDP comms
 UDP = "localhost"
-PORT = 20000
+PORT = 10000
 sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
 sock.bind((UDP,PORT))
 
@@ -38,6 +38,7 @@ print("\n\nPress ctrl + C to exit\n\n")
 
 draw_rbid = 0
 store_pt_name =[]
+num_draw_rbts = 0
 
 pix_x = int(room_width * scale_img)
 pix_y = int(room_length * scale_img)
@@ -58,7 +59,9 @@ def setup():
 	textFont(ubuntu_med,fntsz)
 
 def draw():
-	fill(255,255,255)
+	global present_id
+	present_id = []
+	fill(255)
 	rectMode(CORNER)
 	rect(0.0,0.0,width,height)
 	draw_major_axes()
@@ -74,6 +77,7 @@ def draw():
 			data.append([x,y,yaw,rbid])
 		else:
 			data[col.index(rbid)] = [x,y,yaw,rbid]
+		present_id = sorted(col)
 	for row in data:
 		pushMatrix()
 		translate(row[0],row[1])
@@ -81,9 +85,26 @@ def draw():
 		draw_robot(row[3])
 		popMatrix()
 	drawSpline()
-
+	if len(present_id) > 0:
+		stroke(255,0.2)
+		strokeWeight(1)
+		rectMode(CORNER)
+		if mouseButton != LEFT and draw_rbid < len(present_id):
+			fill(color_bot[present_id[draw_rbid]])
+			rect(0,0,pix_x,fntsz*1.5)
+			fill(255)
+			prompt = "Draw trajectory for Robot:{}".format(present_id[draw_rbid])
+			text(prompt,fntsz/3,fntsz)
+		if mouseButton == LEFT and draw_rbid <= len(present_id):
+			fill(0)
+			rect(0,0,pix_x,fntsz*1.5)
+			fill(255)
+			prompt = "Draw trajectory for Robot:{}".format(present_id[draw_rbid-1])
+			text(prompt,fntsz/3,fntsz)
+			
 def draw_major_axes():
 	stroke(0)
+	strokeWeight(1)
 	line(pix_x/2,0,pix_x/2,pix_y)
 	line(0,pix_y/2,pix_x,pix_y/2)
 
@@ -110,8 +131,14 @@ def convert_coord(mocapx,mocapy):
 	py = pix_y/2 - (mocapy*scale_img)
 	return (px,py)
 
+def rev_convert_coord(virtx,virty):
+	wx = (virtx - pix_x/2)/scale_img
+	wy = (pix_y/2 - virty)/scale_img
+	return [wx,wy]
+
 def draw_robot(r_id):
 	stroke(150)
+	strokeWeight(1)
 	rectMode(CENTER)
 	fill(color_bot[r_id])
 	rect(0.0,0.0,rob_rect_x,rob_rect_y)
@@ -122,6 +149,7 @@ def draw_robot(r_id):
 	text(r_id,0,0)
 	popMatrix()
 	stroke(50)
+	strokeWeight(1)
 	fill(255)
 	beginShape()
 	vertex(rob_rect_x/2.0,rob_rect_y/2.0)
@@ -143,29 +171,30 @@ def draw_wheel(wx,wy):
 def mousePressed():
 	global store_pt_name
 	global draw_rbid
+	global num_draw_rbts
 	draw_rbid += 1
-	store_pt_name.append("store_pt_robot:{}.txt".format(draw_rbid))
-	store_pt = open(store_pt_name[draw_rbid-1],"w+")
-	store_pt.truncate()
-	store_pt.close()
+	if draw_rbid <= len(present_id):
+		num_draw_rbts = draw_rbid
+		store_pt_name.append("store_pt_robot:{}.txt".format(draw_rbid))
+		store_pt = open(store_pt_name[draw_rbid-1],"w+")
+		store_pt.truncate()
+		store_pt.close()
 	
 
 def mouseDragged():
-	global store_pt_name
-	global draw_rbid
-	store_pt = open(store_pt_name[draw_rbid-1],"a+")
-	mousepts = "{},{}\n".format(float(mouseX),float(mouseY))
-	store_pt.write(mousepts)
-	store_pt.close()
+	if draw_rbid <= len(present_id):
+		store_pt = open(store_pt_name[draw_rbid-1],"a+")
+		mousepts = "{},{}\n".format(float(mouseX),float(mouseY))
+		store_pt.write(mousepts)
+		store_pt.close()
 
 def mouseReleased():
-	spline_name = []
-	for loop_id in range(draw_rbid):
-		read_pt = open(store_pt_name[loop_id],"r")
+	if len(present_id)>0 and draw_rbid <= len(present_id):
+		read_pt = open(store_pt_name[draw_rbid-1],"r")
 		curve_pt = [(linef.rstrip('\n')).split(',') for linef in read_pt]
 		read_pt.close()
-		spline_name.append("robot_traj_id:{}.txt".format(draw_rbid))
-		spline_file = open(spline_name[loop_id-1],"w+")
+		spline_name = "robot_traj_id:{}.txt".format(present_id[draw_rbid-1])
+		spline_file = open(spline_name,"w+")
 		spline_file.truncate()
 		if len(curve_pt) >= 2*sm:
 			spline_pt = []
@@ -178,15 +207,17 @@ def mouseReleased():
 			for t in range(sm+1):
 				spline_pt.append(interpolateSpline(float(t)/sm,curve_pt[i],curve_pt[i+ptdist],curve_pt[i+2*ptdist],curve_pt[i+2*ptdist]))
 			for j in range(len(spline_pt)):
-				splinepts = "{},{}\n".format(float(spline_pt[j][0]),float(spline_pt[j][1]))
+				splinecoord = rev_convert_coord(float(spline_pt[j][0]),float(spline_pt[j][1]))
+				splinepts = "{},{}\n".format(splinecoord[0],splinecoord[1])
 				spline_file.write(splinepts)
 			spline_file.close()
 
 
 def drawSpline():
-	for loop_id in range(draw_rbid):
+	for loop_id in range(num_draw_rbts):
 		fill(255,0)
-		stroke(color_bot[loop_id+1])
+		strokeWeight(3)
+		stroke(color_bot[present_id[loop_id]])
 		read_pt = open(store_pt_name[loop_id],"r")
 		curve_pt = [(linef.rstrip('\n')).split(',') for linef in read_pt]
 		read_pt.close()

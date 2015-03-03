@@ -2,12 +2,15 @@ import socket
 import struct
 import math
 
+#####ROBOT AND LAB INFO####
+###########################
+
 #Room size
 room_length = 5.5
 room_width = 3.35
 scale_img = 120.0
 
-#Robot dimensions
+#Robot shape and dimensions
 rob_scale = 1.2
 rob_rect_x = 0.15 * scale_img * rob_scale
 rob_rect_y = 0.2 * scale_img * rob_scale
@@ -17,37 +20,43 @@ rob_wheel_x = 0.04 * scale_img * rob_scale
 rob_wheel_y = 0.02 * scale_img * rob_scale
 rob_wheel_pos = 2.0/3.0 #Value between 1 and 0
 
-#Grid Size
-grid_space = 0.5 
-dot_space = 0.05 
-
-#Font Size
-fntsz = 20
-
-#Curve characteristics
-sm = 10
-ptdist = 5
-
-#UDP comms
-UDP = "localhost"
-PORT = 10000
-sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
-sock.bind((UDP,PORT))
-
+#Robot colors
 color_robot = [[50,55,100],[49,163,84],[255,50,50],
 				[225,204,0],[255,41,0],[253,72,47]]
 
-print("\n\nPress ctrl + C to exit\n\n")
+######UI CUSTOMIZATION#####
+###########################
+
+#Grid size
+grid_space = 0.5 #Distance between subaxes
+dot_space = 0.05 #Distance between dots within the subaxes
+
+#Font size
+fntsz = 20
+
+#Curve characteristics
+sm = 10 #Fineness of curve
+ptdist = 5 #Distance between control points
+
+#########UDP COMMS########
+##########################
+UDP = "localhost"
+PORT = 10000
+
+###########################################################################
+###################ONLY DEVELOPERS GO BEYOND THIS LINE#####################
+###########################################################################
 
 draw_rbid = 0
 store_pt_name =[]
 num_draw_rbts = 0
+data = []
+
+sock = socket.socket(socket.AF_INET,socket.SOCK_DGRAM)
+sock.bind((UDP,PORT))
 
 pix_x = int(room_width * scale_img)
 pix_y = int(room_length * scale_img)
-
-
-data = []
 
 def setup():
 	size(pix_x,pix_y)
@@ -207,7 +216,6 @@ def mousePressed():
 		store_pt.truncate()
 		store_pt.close()
 	
-
 def mouseDragged():
 	if draw_rbid <= len(present_id):
 		store_pt = open(store_pt_name[draw_rbid-1],"a+")

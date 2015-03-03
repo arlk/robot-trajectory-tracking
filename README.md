@@ -35,4 +35,5 @@ Specifications of the motion capture environment - room sizes, robot dimensions 
 
 **Functionality:**
 1. Real-time reproduction of scene captured by the motion capture system:
+![Real-time](ReadMeVids/realtime.gif)
 

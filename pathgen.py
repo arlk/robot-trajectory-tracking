@@ -20,7 +20,8 @@ rob_wheel_x = 0.04 * scale_img * rob_scale
 rob_wheel_y = 0.02 * scale_img * rob_scale
 rob_wheel_pos = 2.0/3.0 #Value between 1 and 0
 
-#Robot colors
+#Robot colors. Add more RGB colors if needed 
+#or the program will cycle through the color pallete.
 color_robot = [[50,55,100],[49,163,84],[255,50,50],
 				[225,204,0],[255,41,0],[253,72,47]]
 
@@ -280,5 +281,5 @@ def interpolateSpline(t,p1,p2,p3,p4):
 	return point
 
 def color_bot(cid,alpha):
-	#print hex(color(color_robot[cid-1][0],color_robot[cid-1][1],color_robot[cid-1][2]))
-	return color(color_robot[cid-1][0],color_robot[cid-1][1],color_robot[cid-1][2],alpha)
+	col_no = (cid-1)%len(color_robot)
+	return color(color_robot[col_no][0],color_robot[col_no][1],color_robot[col_no][2],alpha)

@@ -1,0 +1,1 @@
+In the future, you can place your JRE in here (not implemented yet).

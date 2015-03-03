@@ -24,8 +24,16 @@ rob_wheel_pos = 2.0/3.0 #Value between 1 and 0
 color_robot = [[50,55,100],[49,163,84],[255,50,50],
 				[225,204,0],[255,41,0],[253,72,47]]
 
+#########UDP COMMS########
+##########################
+UDP = "localhost"
+PORT = 10000
+
 ######UI CUSTOMIZATION#####
 ###########################
+
+#Refresh rate
+refreshRate = 600
 
 #Grid size
 grid_space = 0.5 #Distance between subaxes
@@ -37,11 +45,6 @@ fntsz = 20
 #Curve characteristics
 sm = 10 #Fineness of curve
 ptdist = 10 #Distance between control points
-
-#########UDP COMMS########
-##########################
-UDP = "localhost"
-PORT = 10000
 
 ###########################################################################
 ###################ONLY DEVELOPERS GO BEYOND THIS LINE#####################
@@ -61,7 +64,7 @@ pix_y = int(room_length * scale_img)
 def setup():
 	size(pix_x,pix_y)
 	colorMode(RGB)
-	frameRate(600)
+	frameRate(refreshRate)
 	noStroke()
 	ubuntu_med = loadFont("Ubuntu-Medium-60.vlw")
 	textFont(ubuntu_med,fntsz)
@@ -80,7 +83,7 @@ def draw():
 	draw_minor_axes()
 	smooth()
 	udprecv, addr = sock.recvfrom(1024)
-	worldx,worldy,yaw,rbid,status,dataRate = struct.unpack('<dddddd',udprecv)
+	worldx,worldy,yaw,rbid,status,dataFrame = struct.unpack('<dddddd',udprecv)
 	x,y = convert_coord(worldx,worldy)
 	yaw *= -1  #Reversing direction of rotation
 	rbid = int(rbid)
@@ -94,7 +97,7 @@ def draw():
 	for row in data:
 		pushMatrix()
 		translate(row[0],row[1])
-		rotate(row[2]*frameCount/200.0)
+		rotate(row[2])
 		draw_robot(row[3])
 		popMatrix()
 	drawSpline()

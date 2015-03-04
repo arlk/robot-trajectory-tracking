@@ -43,9 +43,11 @@ Specifications of the motion capture environment - room sizes, robot dimensions 
 **Functionality:**
 
 1. Real-time reproduction of the scene by the motion capture system:
+
 ![Real-time](ReadMeVids/realtime.gif)
 
 1. Drawing a trajectory with the cursor with immediate [Catmull-Rom](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline) spline interpolation.
+
 ![Trajectory-drawing](ReadMeVids/drawtraj.gif)
 
 1. Clear trajectories whenever you need to and start again.

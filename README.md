@@ -1,6 +1,9 @@
 # Robot trajectory tracking
+
 **User-defined path generation :** *COMPLETED*
+
 **L1 Navigation:** *PENDING*
+
 **Obstacle Avoidance:** *PENDING*
 
 ### Path Generation:
@@ -16,6 +19,10 @@ export PATH=$PATH:/PATH/TO/PROCESSING/processing.py-xxxx-linuxvv
 
 Write these changes directly to `~/.bashrc` and restart the terminal or source bashrc.
 
+You're all set! Once all your variables have been correctly defined, all you need to do is execute the run script.
+```
+./run.sh
+```
 `run.sh` is a bash script that executes the required files, so the user does not need to run each of the files seperately. But the user-defined variables will need to be changed in each python script.
 
 `udps.py` can simulate data instead of your mocap software, which is extremely useful if you need to debug your code before implementing them with real robots.
@@ -35,7 +42,7 @@ Specifications of the motion capture environment - room sizes, robot dimensions 
 
 **Functionality:**
 
-1. Real-time reproduction of scene captured by the motion capture system:
+1. Real-time reproduction of the scene by the motion capture system:
 ![Real-time](ReadMeVids/realtime.gif)
 
 1. Drawing a trajectory with the cursor with immediate [Catmull-Rom](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline) spline interpolation.

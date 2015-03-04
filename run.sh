@@ -1,10 +1,18 @@
 #!/bin/bash
 
 # Before executing add the directory of processing-py.sh and, 
-# pathgen_processing directory to your PATH environment variable
+# robot-trajectory-tracking directory to your PATH environment variable
 process=processing-py.sh
 pathgen=pathgen.py
 udpsend=udps.py #USE ONLY WHEN SENDING SIMULATION DATA
+
+read -p "Old trajectory files within the directory will be deleted. Do you want to proceed? (Y/n)" ans
+if [[$ans != "Y"]]
+then
+	echo "Ok. Exiting..."
+	exit 0
+fi
+rm -rf robot_traj_id*
 
 echo "UDP simulation data sending..."
 exec ${udpsend} &	

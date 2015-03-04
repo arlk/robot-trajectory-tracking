@@ -7,7 +7,7 @@
 **Obstacle Avoidance:** *PENDING*
 
 ### Path Generation:
-This code provides a cleaner and more beautiful interface to work with than its MATLAB [equivalent](https://github.com/arunlakshmanan/path-generation). It is written in the [Python](http://py.processing.org/) and blended with [Processing](https://processing.org/) a development environment. It can be used in laboratories to define user-generated trajectories for individual robots. Implementation for swarm robots is still a work in progress.
+This code provides a cleaner and more beautiful interface to work with than its MATLAB [equivalent](https://github.com/arunlakshmanan/path-generation). It is written in the [Python](http://py.processing.org/) and blended with [Processing](https://processing.org/), a development environment. It can be used in laboratories to define user-generated trajectories for individual robots. Implementation for swarm robots is still a work in progress.
 
 This is currently on available to *Linux* (Debian) users - I am working on implementing this on other platforms including Windows. Before executing this program, you will need to download the Python module for Processing, which is avaiable in both a [32-bit](http://py.processing.org/processing.py-0202-linux32.tgz) and [64-bit](http://py.processing.org/processing.py-0202-linux64.tgz) versions.
 

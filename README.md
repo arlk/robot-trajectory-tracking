@@ -46,10 +46,10 @@ Specifications of the motion capture environment - room sizes, robot dimensions 
 
 ![Real-time](ReadMeVids/realtime.gif)
 
-1. Drawing a trajectory with the cursor with immediate [Catmull-Rom](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline) spline interpolation.
+2. Drawing a trajectory with the cursor with immediate [Catmull-Rom](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline) spline interpolation.
 
 ![Trajectory-drawing](ReadMeVids/drawtraj.gif)
 
-1. Clear trajectories whenever you need to and start again.
+3. Clear trajectories whenever you need to and start again.
 
 **Output**: The trajectories generated are stored as a comma seperated values in files, referenced by their `robot id`. *Future work involves using these files for trajectory tracking using L1 navigation.*

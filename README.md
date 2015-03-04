@@ -34,6 +34,13 @@ Of course, the communication protocol can be changed to allow more variable such
 Specifications of the motion capture environment - room sizes, robot dimensions and colors can be specified at the beginning of code. And other UI-related customizations such as grid spacing, font sizes, spline smoothness etc. can also be found in the code.
 
 **Functionality:**
+
 1. Real-time reproduction of scene captured by the motion capture system:
 ![Real-time](ReadMeVids/realtime.gif)
 
+1. Drawing a trajectory with the cursor with immediate [Catmull-Rom](https://en.wikipedia.org/wiki/Cubic_Hermite_spline#Catmull.E2.80.93Rom_spline) spline interpolation.
+![Trajectory-drawing](ReadMeVids/drawtraj.gif)
+
+1. Clear trajectories whenever you need to and start again.
+
+**Output**: The trajectories generated are stored as a comma seperated values in files, referenced by their `robot id`. *Future work involves using these files for trajectory tracking using L1 navigation.*

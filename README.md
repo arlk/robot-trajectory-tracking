@@ -2,7 +2,7 @@
 
 **User-defined path generation :** *COMPLETED*
 
-**L1 Navigation:** *PENDING*
+**L1 Navigation:** *COMPLETED*
 
 **Obstacle Avoidance:** *PENDING*
 
@@ -52,4 +52,14 @@ Specifications of the motion capture environment - room sizes, robot dimensions 
 
 3\. Clear trajectories whenever you need to and start again.
 
-**Output**: The trajectories generated are stored as a comma seperated values in files, referenced by their `robot id`. *Future work involves using these files for trajectory tracking using L1 navigation.*
+**Output**: The trajectories generated are stored as a comma separated values in files, referenced by their `robot id`. 
+
+###L1 Navigation:
+
+`multiL1.py` can control multiple robots and make them track their trajectories independently and simultaneously.
+
+**Videos:**
+1\. Single robot following a user-defined path.
+![L1-path-follow](https://www.youtube.com/watch?v=A6yXqAjve4w)
+
+*Future work involves using these files for obstacle avoidance using L1 navigation.*

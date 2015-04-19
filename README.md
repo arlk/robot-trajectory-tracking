@@ -60,6 +60,6 @@ Specifications of the motion capture environment - room sizes, robot dimensions 
 
 **Videos:**
 1\. Single robot following a user-defined path.
-![L1-path-follow](https://www.youtube.com/watch?v=A6yXqAjve4w)
+[![L1-path-follow](http://img.youtube.com/vi/A6yXqAjve4w/0.jpg)](http://www.youtube.com/watch?v=A6yXqAjve4w)
 
 *Future work involves using these files for obstacle avoidance using L1 navigation.*

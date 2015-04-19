@@ -1,5 +1,6 @@
 import socket
 import struct
+import math
 
 #####ROBOT AND LAB INFO####
 ###########################
@@ -26,7 +27,7 @@ color_robot = [[50,55,100],[49,163,84],[255,50,50],
 
 #########UDP COMMS########
 ##########################
-UDP = "localhost"
+UDP = "192.168.1.90"
 PORT = 10000
 
 ######UI CUSTOMIZATION#####
@@ -62,6 +63,8 @@ pix_x = int(room_width * scale_img)
 pix_y = int(room_length * scale_img)
 
 def setup():
+	global present_id
+	present_id = []
 	size(pix_x,pix_y)
 	colorMode(RGB)
 	frameRate(refreshRate)
@@ -73,7 +76,6 @@ def draw():
 	global present_id
 	global draw_rbid
 	global num_draw_rbts
-	present_id = []
 	strokeWeight(1)
 	stroke(255)
 	fill(255)
@@ -85,14 +87,16 @@ def draw():
 	udprecv, addr = sock.recvfrom(1024)
 	worldx,worldy,yaw,rbid,status,dataFrame = struct.unpack('<dddddd',udprecv)
 	x,y = convert_coord(worldx,worldy)
+	yaw = yaw*math.pi/180
 	yaw *= -1  #Reversing direction of rotation
 	rbid = int(rbid)
-	if status == 1:
+	if status > 0:
 		col = [row[3] for row in data]
 		if (rbid in col) != 1:
 			data.append([x,y,yaw,rbid])
 		else:
 			data[col.index(rbid)] = [x,y,yaw,rbid]
+		col = [row[3] for row in data]
 		present_id = sorted(col)
 	for row in data:
 		pushMatrix()
@@ -215,7 +219,7 @@ def mousePressed():
 	draw_rbid += 1
 	if draw_rbid <= len(present_id):
 		num_draw_rbts = draw_rbid
-		store_pt_name.append("temp_store_pt_robot:{}.txt".format(draw_rbid))
+		store_pt_name.append("temp_store_pt_robot:{}.csv".format(draw_rbid))
 		store_pt = open(store_pt_name[draw_rbid-1],"w+")
 		store_pt.truncate()
 		store_pt.close()
@@ -232,7 +236,7 @@ def mouseReleased():
 		read_pt = open(store_pt_name[draw_rbid-1],"r")
 		curve_pt = [(linef.rstrip('\n')).split(',') for linef in read_pt]
 		read_pt.close()
-		spline_name = "robot_traj_id:{}.txt".format(present_id[draw_rbid-1])
+		spline_name = "robot_traj_id:{}.csv".format(present_id[draw_rbid-1])
 		spline_file = open(spline_name,"w+")
 		spline_file.truncate()
 		if len(curve_pt) >= 2*sm:

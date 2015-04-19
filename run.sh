@@ -7,15 +7,15 @@ pathgen=pathgen.py
 udpsend=udps.py #USE ONLY WHEN SENDING SIMULATION DATA
 
 read -p "Old trajectory files within the directory will be deleted. Do you want to proceed? (Y/n)" ans
-if [[$ans != "Y"]]
+if [[ $ans != "Y" ]]
 then
 	echo "Ok. Exiting..."
 	exit 0
 fi
 rm -rf robot_traj_id*
 
-echo "UDP simulation data sending..."
-exec ${udpsend} &	
+# echo "UDP simulation data sending..."
+# exec ${udpsend} &	
 
 echo "UDP receiving..."
 echo "Starting simulation..."

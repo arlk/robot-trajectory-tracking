@@ -6,19 +6,19 @@ import math
 ###########################
 
 #Room size
-room_length = 5.5
+room_length = 5.80
 room_width = 3.35
 scale_img = 120.0
 
 #Robot shape and dimensions
-rob_scale = 1.2
-rob_rect_x = 0.15 * scale_img * rob_scale
-rob_rect_y = 0.2 * scale_img * rob_scale
-rob_trapz_wid = 0.05 * scale_img * rob_scale
-rob_trapz_side = 0.07 * scale_img * rob_scale
-rob_wheel_x = 0.04 * scale_img * rob_scale
-rob_wheel_y = 0.02 * scale_img * rob_scale
-rob_wheel_pos = 2.0/3.0 #Value between 1 and 0
+rob_scale = 1.0
+rob_rect_x = 0.37 * scale_img * rob_scale
+rob_rect_y = 0.33 * scale_img * rob_scale
+rob_trapz_wid = 0.10 * scale_img * rob_scale
+rob_trapz_side = 0.14 * scale_img * rob_scale
+rob_wheel_x = 0.07 * scale_img * rob_scale
+rob_wheel_y = 0.03 * scale_img * rob_scale
+rob_wheel_pos = 8.0/13.0 #Value between 1 and 0
 
 #Robot colors. Add more RGB colors if needed 
 #or the program will cycle through the color pallete.
@@ -122,7 +122,7 @@ def draw():
 			num_draw_rbts = 0
 		if mouseX > pix_x-60 and mouseY > pix_y - fntsz:
 			sys.exit(0)
-	if len(present_id) > 0:
+	if len(present_id) > 0 and status > 0:
 		stroke(255)
 		strokeWeight(1)
 		rectMode(CORNER)

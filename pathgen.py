@@ -28,6 +28,7 @@ color_robot = [[50,55,100],[49,163,84],[255,50,50],
 #########UDP COMMS########
 ##########################
 UDP = "192.168.1.90"
+# UDP = 'localhost'
 PORT = 10000
 
 ######UI CUSTOMIZATION#####
@@ -129,13 +130,13 @@ def draw():
 		if mouseButton != LEFT and draw_rbid < len(present_id):
 			fill(color_bot([present_id[draw_rbid]][0],255))
 			rect(0,0,pix_x,fntsz*1.5)
-			circtimeout = frameCount%600
-			if circtimeout<300:
-				fill(255,0)
-				strokeWeight(float(circtimeout%300)/30)
-				stroke(color_bot([present_id[draw_rbid]][0],255*(1-float(circtimeout%300)/300)))
-				circ = data[col.index(present_id[draw_rbid])]
-				ellipse(circ[0],circ[1],float(circtimeout%300)/3,float(circtimeout%300)/3)
+			# circtimeout = frameCount%600
+			# if circtimeout<300:
+			# 	fill(255,0)
+			# 	strokeWeight(float(circtimeout%300)/30)
+			# 	stroke(color_bot([present_id[draw_rbid]][0],255*(1-float(circtimeout%300)/300)))
+			# 	circ = data[col.index(present_id[draw_rbid])]
+			# 	ellipse(circ[0],circ[1],float(circtimeout%300)/3,float(circtimeout%300)/3)
 			fill(255)
 			prompt = "Draw trajectory for Robot:{}".format(present_id[draw_rbid])
 			text(prompt,fntsz/3,fntsz)

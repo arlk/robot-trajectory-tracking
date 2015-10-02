@@ -1,0 +1,28 @@
+#!/bin/bash
+CONTENTS="$( cd "$( dirname "$0" )/.." && pwd )"
+# if java not packaged:
+if [ -n "$JAVA_HOME" ]; then
+    JAVA="$JAVA_HOME/bin/java"
+elif [ -x "/usr/libexec/java_home" ]; then
+    JAVA="$(/usr/libexec/java_home)/bin/java"
+elif test -h "/Library/Java/Home"; then
+    JAVA="/Library/Java/Home/bin/java"
+else
+    JAVA="/Library/Internet Plugins/JavaAppletPlugin.plugin/Contents/Home/bin/java"
+fi
+
+if [ ! -x $JAVA ]; then
+    osascript "$CONTENTS/Resources/dialogs.applescript" nojava "$CONTENTS/Resources/sketch.icns"
+    exit 1
+fi
+
+JAVA_VERSION=$($JAVA -version 2>&1)
+
+if [[ "$JAVA_VERSION" =~ ("1.4"|"1.5"|"1.6") ]]; then
+    osascript "$CONTENTS/Resources/dialogs.applescript" oldjava "$CONTENTS/Resources/sketch.icns"
+    exit 1
+fi
+
+
+APPDIR="$CONTENTS/Processing"
+$JAVA -Djna.nosys=true -Djava.library.path="$APPDIR:$APPDIR/lib:$APPDIR/lib/jycessing" -ea -cp "$APPDIR/lib/jycessing/core.jar:$APPDIR/lib/jycessing/jogl-all.jar:$APPDIR/lib/jycessing/jogl-all-natives-macosx-universal.jar:$APPDIR/lib/jycessing/gluegen-rt-natives-macosx-universal.jar:$APPDIR/lib/jycessing/PythonMode.jar:$APPDIR/lib/jycessing/jython.jar:$APPDIR/lib/jycessing/guava-17.0.jar:$APPDIR/lib/jycessing/gluegen-rt.jar" -splash:"$APPDIR/lib/jycessing/splash.png" -Xdock:icon="$CONTENTS/Resources/sketch.icns" -Xdock:name="sketch_150303a" jycessing.Runner --noredirect --exported --hide-stop "$APPDIR/source/sketch_150303a.pyde"
